@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 
 class Book extends React.Component {
 
+  handleChange = (event) => {
+    this.props.changeShelf(this.props.details, event.target.value)
+  }
+
   render() {
 
     const thumb = `url('${this.props.details.imageLinks.thumbnail}')`
@@ -17,7 +21,7 @@ class Book extends React.Component {
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: thumb }}></div>
             <div className="book-shelf-changer">
-              <select value={this.props.details.shelf}>
+              <select value={this.props.details.shelf} onChange={this.handleChange} >
                 <option value="none" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
@@ -37,6 +41,7 @@ class Book extends React.Component {
 
 Book.propTypes = {
   details: PropTypes.object.isRequired,
+  changeShelf: PropTypes.func.isRequired,
 }
 
 export default Book

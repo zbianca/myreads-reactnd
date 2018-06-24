@@ -16,6 +16,14 @@ class App extends React.Component {
     })
   }
 
+  changeShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then((response) => {
+      BooksAPI.getAll().then((books) => {
+        this.setState({ books })
+      })
+    })
+  }
+
   render() {
     return (
       <div className="list-books">
@@ -23,9 +31,9 @@ class App extends React.Component {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          <Shelf title="Currently Reading" shelf="currentlyReading" books={this.state.books} />
-          <Shelf title="Want to Read" shelf="wantToRead" books={this.state.books} />
-          <Shelf title="Read" shelf="read" books={this.state.books} />
+          <Shelf title="Currently Reading" shelf="currentlyReading" books={this.state.books} changeShelf={this.changeShelf} />
+          <Shelf title="Want to Read" shelf="wantToRead" books={this.state.books} changeShelf={this.changeShelf} />
+          <Shelf title="Read" shelf="read" books={this.state.books} changeShelf={this.changeShelf} />
         </div>
         <div className="open-search">
           <Link to="/search">Add a book</Link>

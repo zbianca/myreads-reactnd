@@ -17,7 +17,7 @@ class Shelf extends React.Component {
         <h2 className="bookshelf-title">{this.props.title}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {booksToRender.map(book => <Book details={book} key={book.id} />)}
+            {booksToRender.map(book => <Book details={book} key={book.id}  changeShelf={this.props.changeShelf} />)}
           </ol>
         </div>
       </div>
@@ -30,6 +30,7 @@ Shelf.propTypes = {
   title: PropTypes.string.isRequired,
   books: PropTypes.array.isRequired,
   shelf: PropTypes.string.isRequired,
+  changeShelf: PropTypes.func.isRequired,
 }
 
 export default Shelf
