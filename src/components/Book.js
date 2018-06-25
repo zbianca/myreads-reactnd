@@ -1,7 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import noImage from '../icons/noimage.png'
 
 class Book extends React.Component {
+
+  static propTypes = {
+    details: PropTypes.object.isRequired,
+    changeShelf: PropTypes.func.isRequired,
+  }
 
   handleChange = (event) => {
     this.props.changeShelf(this.props.details, event.target.value)
@@ -9,7 +15,7 @@ class Book extends React.Component {
 
   render() {
 
-    const thumb = `url('${this.props.details.imageLinks.thumbnail}')`
+    const thumb = this.props.details.imageLinks? this.props.details.imageLinks.thumbnail : noImage
     let title = this.props.details.title
     if (this.props.details.subtitle) {
       title += `: ${this.props.details.subtitle}`
@@ -19,10 +25,10 @@ class Book extends React.Component {
       <li>
         <div className="book">
           <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: thumb }}></div>
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url('${thumb}')` }}></div>
             <div className="book-shelf-changer">
-              <select value={this.props.details.shelf} onChange={this.handleChange} >
-                <option value="none" disabled>Move to...</option>
+              <select value={this.props.details.shelf? this.props.details.shelf : 'none'} onChange={this.handleChange} >
+                <option value="moveTo" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
                 <option value="read">Read</option>
@@ -31,17 +37,12 @@ class Book extends React.Component {
             </div>
           </div>
           <div className="book-title">{title}</div>
-          <div className="book-authors">{this.props.details.authors.join(', ')}</div>
+          <div className="book-authors">{this.props.details.authors? this.props.details.authors.join(', ') : this.props.details.publisher}</div>
         </div>
       </li>
 
     )
   }
-}
-
-Book.propTypes = {
-  details: PropTypes.object.isRequired,
-  changeShelf: PropTypes.func.isRequired,
 }
 
 export default Book

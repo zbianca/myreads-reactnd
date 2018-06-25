@@ -17,26 +17,30 @@ class App extends React.Component {
   }
 
   changeShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then((response) => {
+    BooksAPI.update(book, shelf).then(
       BooksAPI.getAll().then((books) => {
         this.setState({ books })
       })
-    })
+    )
   }
 
   render() {
+
+    const { books } = this.state
+
     return (
       <div className="list-books">
         <div className="list-books-title">
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          <Shelf title="Currently Reading" shelf="currentlyReading" books={this.state.books} changeShelf={this.changeShelf} />
-          <Shelf title="Want to Read" shelf="wantToRead" books={this.state.books} changeShelf={this.changeShelf} />
-          <Shelf title="Read" shelf="read" books={this.state.books} changeShelf={this.changeShelf} />
+          <Shelf title="Currently Reading" shelf="currentlyReading" books={books} changeShelf={this.changeShelf} />
+          <Shelf title="Want to Read" shelf="wantToRead" books={books} changeShelf={this.changeShelf} />
+          <Shelf title="Read" shelf="read" books={books} changeShelf={this.changeShelf} />
         </div>
         <div className="open-search">
-          <Link to="/search">Add a book</Link>
+          {/* currently passing this.state.books to Search */}
+          <Link to={{ pathname: '/search', state: { books } } }>Add a book</Link>
         </div>
       </div>
     )
