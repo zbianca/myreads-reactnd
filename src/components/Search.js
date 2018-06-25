@@ -9,29 +9,50 @@ class Search extends React.Component {
 
   state = {
     query: '',
-    searchResults: []
+    searchResults: [],
+    books: [],
+    noResults: ''
   }
 
-  updateQuery = (query) => {
-    this.setState({ query: query.trim()})
-    BooksAPI.search(query).then((searchResults) => {
-      this.setState({ searchResults })
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
     })
   }
 
-  clearQuery = () => {
-    this.setState({ query: '' })
-  }
-
   changeShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(
-      BooksAPI.getAll().then((books) => {
-        this.setState({ books })
-      })
-    )
+    BooksAPI.update(book, shelf)
   }
 
+  updateQuery = (query) => {
+    this.setState({ query })
+    if (query === '') {
+      this.setState({ searchResults: [], noResults: '' })
+    } else { this.searchBooks(query) }
+  }
 
+  searchBooks = (query) => {
+    BooksAPI.search(query).then((searchResults) => {
+      if (searchResults.length > 0) {
+        this.addShelftoResults(this.state.books, searchResults)
+      } else {
+        this.setState({ searchResults: [], noResults: 'No results' })
+      }
+    })
+  }
+
+  addShelftoResults = (books, searchResults) => {
+    this.setState({
+      searchResults: searchResults.map( result => {
+        books.forEach( book => {
+          if (book.id === result.id) {
+            result.shelf = book.shelf
+          }
+        })
+        return result
+      })
+    })
+  }
 
   render() {
 
@@ -61,7 +82,7 @@ class Search extends React.Component {
             {
               (this.state.searchResults.length > 0) ?
                 this.state.searchResults.map(book => <Book details={book} key={book.id} changeShelf={this.changeShelf} />)
-                : null
+                : this.state.noResults
             }
           </ol>
         </div>

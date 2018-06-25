@@ -39,8 +39,7 @@ class App extends React.Component {
           <Shelf title="Read" shelf="read" books={books} changeShelf={this.changeShelf} />
         </div>
         <div className="open-search">
-          {/* currently passing this.state.books to Search */}
-          <Link to={{ pathname: '/search', state: { books } } }>Add a book</Link>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     )
